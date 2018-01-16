@@ -3,51 +3,40 @@
 import os
 from string import punctuation
 
+# create collection of histograms
+counts = {}
 
-# function to strip punctuation from a sting
+def main():
+    # open each file
+    for filename in os.listdir("./sona"):
+        path = "./sona/" + filename
+        file = open(path, "r")
+        h = make_histogram(file)
+        # save this in "counts" as filename -> histogram
+        counts[filename] = h
+
+# function to strip punctuation from a string
 # i.e. "almost," -> "almost"
 def strip_punctuation(s):
     return ''.join(c for c in s if c not in punctuation)
 
-# this function take an array of strings and 
+# function takes a file and 
 # returns a dictionary containing each word and a count of times that word is seen
-def make_histogram(list):
+def make_histogram(file):
     histogram = {}
-    print "got here"
-    print list
-    for word in list:
-        # get rid of punctuation and make them all lowercase
-        word = strip_punctuation(word)
-        word = word.lower()
-
-        if word in histogram:
-            histogram[word] += 1
-        else:
-            histogram[word] = 1
-    # print histogram
+    for line in file:
+        for word in line.split():
+        	# lowercase'd and getting rid of trailing punctuation
+            word = strip_punctuation(word).lower()
+            # add to histogram
+            if word in histogram:
+                histogram[word] += 1
+            else:
+                histogram[word] = 1
     return histogram
-
-
-
-# create collection of histograms
-counts = {}
-
-# open each file
-for filename in os.listdir("./sona"):
-    # print(filename)
-    path = "./sona/" + filename
-    file = open(path, "r")
-    # file is open, now split and read into an array
-    data = file.read().split()
-    # count instances of each word
-    h = make_histogram(data)
-    print h
-    counts[filename] = h
-    print "-----"
-    #do it again
-
+    
+main()
 print counts
-
 
 # each document will need a histogram
 # the entire corpus will need a histogram
