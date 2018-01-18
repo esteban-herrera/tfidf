@@ -2,9 +2,12 @@
 
 import os
 from string import punctuation
+import operator
 
 # create collection of histograms
 counts = {}
+blacklist = {"the", "not", "and", "or", "like", "of", "to", "in", "we", "a", "that", "our", "will", "for", "is", "this", "have", "as", "all", "are", "be", "with", "on", "by", "also", " ", "should", "which", "has", "at", "it", "their", "us", "year", "these", "from", "they"}
+
 
 def main():
     # open each file
@@ -28,6 +31,8 @@ def make_histogram(file):
         for word in line.split():
         	# lowercase'd and getting rid of trailing punctuation
             word = strip_punctuation(word).lower()
+            if word in blacklist:
+                continue    
             # add to histogram
             if word in histogram:
                 histogram[word] += 1
@@ -38,7 +43,12 @@ def make_histogram(file):
 main()
 print counts
 
+
 # each document will need a histogram
 # the entire corpus will need a histogram
 
 # then I should look at the top 'x' tf-idf scores of each document
+
+for document in counts:
+    print document
+    print max(counts[document].iteritems(), key=operator.itemgetter(1))[0]
