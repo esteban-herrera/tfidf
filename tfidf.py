@@ -49,6 +49,8 @@ print counts
 
 # then I should look at the top 'x' tf-idf scores of each document
 
+
+# Just print the most common words in each speech.
 for document in counts:
     print document
     print max(counts[document].iteritems(), key=operator.itemgetter(1))[0]
