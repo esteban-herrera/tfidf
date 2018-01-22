@@ -5,18 +5,25 @@ from string import punctuation
 import operator
 
 # create collection of histograms
-counts = {}
 blacklist = {"the", "not", "and", "or", "like", "of", "to", "in", "we", "a", "that", "our", "will", "for", "is", "this", "have", "as", "all", "are", "be", "with", "on", "by", "also", " ", "should", "which", "has", "at", "it", "their", "us", "year", "these", "from", "they"}
-
+counts = {}
 
 def main():
+    count_dir("sona")
+
+def count_dir(path):
+    global counts
+    counts = {}
     # open each file
-    for filename in os.listdir("./sona"):
-        path = "./sona/" + filename
-        file = open(path, "r")
+    for filename in os.listdir("./samples/" + path):
+        file = open("./samples/" + path + "/" + filename, "r")
         h = make_histogram(file)
         # save this in "counts" as filename -> histogram
         counts[filename] = h
+#    print "*****"
+#    print counts
+#    print len(counts)
+#    print "*****"
 
 # function to strip punctuation from a string
 # i.e. "almost," -> "almost"
@@ -39,18 +46,17 @@ def make_histogram(file):
             else:
                 histogram[word] = 1
     return histogram
-    
-main()
-print counts
-
 
 # each document will need a histogram
 # the entire corpus will need a histogram
 
 # then I should look at the top 'x' tf-idf scores of each document
 
-
 # Just print the most common words in each speech.
-for document in counts:
-    print document
-    print max(counts[document].iteritems(), key=operator.itemgetter(1))[0]
+#for document in counts:
+#    print document
+#    print max(counts[document].iteritems(), key=operator.itemgetter(1))[0]
+
+if __name__ == '__main__':
+    main()
+    print counts
