@@ -87,9 +87,9 @@ def makeTFIDF(tfs):
         for doc in counts:
             if word in counts[doc]:
                 numberOfDocsWithTerm += 1
-        wordTFIDF = math.log(numberOfDocs/numberOfDocsWithTerm)
+        wordTFIDF = tf*math.log(numberOfDocs/numberOfDocsWithTerm)
         tfidf[word] = wordTFIDF
-        print "word:", word, " - numberOfDocs:", numberOfDocs, " - numberOfDocsWithTerm:", numberOfDocsWithTerm, "TFIDF:",wordTFIDF
+        print "word:", word, " - tf:", tf, " - numberOfDocs:", numberOfDocs, " - numberOfDocsWithTerm:", numberOfDocsWithTerm, "TFIDF:",wordTFIDF
     return tfidf
 
 def most(doc):
@@ -103,6 +103,7 @@ def most(doc):
 if __name__ == '__main__':
     main()
     first = next(iter(tfs))
+#    first = "more_words.txt"
     print "--- COUNTS ---"
     print counts[first]
     print "--- TERM FREQS ---"
