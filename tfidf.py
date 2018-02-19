@@ -16,7 +16,7 @@ tfidfs = {}
 numberOfDocs = 0
 
 def main():
-    count_dir("tiny_set")
+    count_dir("small_set")
 
 def count_dir(path):
     global counts
@@ -33,11 +33,9 @@ def count_dir(path):
         counts[filename] = make_histogram(file)
         # save this in "tfs" as filename -> term freqs
     for filename in files:
-        file = open("./samples/" + path + "/" + filename, "r")
         tfs[filename] = makeTF(counts[filename])
         # calculate tfidfs, given the term freqs.
     for filename in files:
-        file = open("./samples/" + path + "/" + filename, "r")
         tfidfs[filename] = makeTFIDF(tfs[filename])
 
 def makeTF(hist):
