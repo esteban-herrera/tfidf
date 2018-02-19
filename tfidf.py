@@ -96,9 +96,9 @@ def most(doc):
     global tfidfs
     print "most relevant terms in ", doc
     dict = tfidfs[doc]
-    print dict
+    # print dict
     words_ordered_descending_length = sorted(dict, key=dict.get, reverse=True)
-    print words_ordered_descending_length
+    print words_ordered_descending_length[:10]
 
 if __name__ == '__main__':
     main()
@@ -111,7 +111,9 @@ if __name__ == '__main__':
     print "--- TF-IDFS ---"
     print tfidfs[first]
     print "--- MOST RELEVANT TERMS ---"
-    print most(first)
+    files = os.listdir("./samples/small_set")
+    for filename in files:
+        print most(filename)
 
 # Calculate term frequency
 # TF(t) = (Number of times term t appears in a document) 
