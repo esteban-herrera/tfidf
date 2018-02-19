@@ -15,7 +15,7 @@ tfs = {}
 tfidfs = {}
 
 def main():
-    count_dir("sona")
+    count_dir("tiny_set")
 
 def count_dir(path):
     global counts
@@ -82,19 +82,29 @@ def makeTFIDF(tfs):
         tfidf[word] = wordTFIDF
     return tfidf
 
+def most(doc):
+    global tfidfs
+    print "most relevant terms in ", doc
+    dict = tfidfs[doc]
+    print dict
+    words_ordered_descending_length = sorted(dict, key=dict.get, reverse=True)
+    print words_ordered_descending_length
+
 if __name__ == '__main__':
     main()
-    # print "--- COUNTS ---"
-    # print counts[next(iter(counts))]
-
+    first = next(iter(tfs))
+    print "--- COUNTS ---"
+    print counts[next(iter(counts))]
     print "--- TERM FREQS ---"
-    print tfs[next(iter(tfs))]
+    print tfs[first]
     print "--- TF-IDFS ---"
-    print tfidfs[next(iter(tfidfs))]
-
+    print tfidfs[first]
+    print "--- MOST RELEVANT TERMS ---"
+    print most(first)
 
 # Calculate term frequency
-# TF(t) = (Number of times term t appears in a document) / (Total number of terms in the document).
+# TF(t) = (Number of times term t appears in a document) 
+#            / (Total number of terms in the document).
 
 # Calculate idf
 # IDF(t) = log_e(Total number of documents / Number of documents with term t in it).
