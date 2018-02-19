@@ -3,6 +3,7 @@
 import os
 from string import punctuation
 import operator
+import math
 
 # create collection of histograms
 # blacklist = {"the", "not", "and", "or", "like", "of", "to", "in", "we", "a", "that", "our", "will", "for", "is", "this", "have", "as", "all", "are", "be", "with", "on", "by", "also", " ", "should", "which", "has", "at", "it", "their", "us", "year", "these", "from", "they"}
@@ -11,6 +12,7 @@ import operator
 # value is histogram
 counts = {}
 tfs = {}
+tfidfs = {}
 
 def main():
     count_dir("sona")
@@ -18,6 +20,7 @@ def main():
 def count_dir(path):
     global counts
     global tfs
+    global tfidfs
     # open each file
     for filename in os.listdir("./samples/" + path):
         file = open("./samples/" + path + "/" + filename, "r")
@@ -25,11 +28,9 @@ def count_dir(path):
         counts[filename] = make_histogram(file)
         # save this in "tfs" as filename -> term freqs
         tfs[filename] = makeTF(counts[filename])
+        # calculate tfidfs, given the term freqs.
+        tfidfs[filename] = makeTFIDF(tfs[filename])
 
-#    print "*****"
-#    print counts
-#    print len(counts)
-#    print "*****"
 
 def makeTF(hist):
     tf = {}
@@ -59,24 +60,27 @@ def make_histogram(file):
         for word in line.split():
         	# lowercase'd and getting rid of trailing punctuation
             word = strip_punctuation(word).lower()
-            #if word in blacklist:
-            #    continue    
-            # add to histogram
             if word in histogram:
                 histogram[word] += 1
             else:
                 histogram[word] = 1
     return histogram
 
-# each document will need a histogram
-# the entire corpus will need a histogram
-
-# then I should look at the top 'x' tf-idf scores of each document
-
-# Just print the most common words in each speech.
-#for document in counts:
-#    print document
-#    print max(counts[document].iteritems(), key=operator.itemgetter(1))[0]
+def makeTFIDF(tfs):
+    tfidf = {}
+    numberOfDocs = len(counts) # TODO, shouldn't recalculate this so many times
+    for word in tfs:
+        numberOfDocsWithTerm = 0.0;
+        # TF
+        tf = tfs[word]
+        # IDF = log_e (total number of docs / number of docs with term in it)
+        # num of Docs with term in it
+        for doc in counts:
+            if word in counts[doc]:
+                numberOfDocsWithTerm += 1
+        wordTFIDF = math.log(numberOfDocs/numberOfDocsWithTerm)
+        tfidf[word] = wordTFIDF
+    return tfidf
 
 if __name__ == '__main__':
     main()
@@ -85,6 +89,8 @@ if __name__ == '__main__':
 
     print "--- TERM FREQS ---"
     print tfs[next(iter(tfs))]
+    print "--- TF-IDFS ---"
+    print tfidfs[next(iter(tfidfs))]
 
 
 # Calculate term frequency
