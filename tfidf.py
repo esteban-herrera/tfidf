@@ -16,17 +16,18 @@ tfidfs = {}
 numberOfDocs = 0
 
 def main():
-    count_dir("small_set")
+    count_dir("sona")
 
 def count_dir(path):
     global counts
     global tfs
     global tfidfs
     global numberOfDocs
-    # open each file
-    files = os.listdir("./samples/" + path)
-    numberOfDocs = len(files) # TODO, shouldn't recalculate this so many times
 
+    files = os.listdir("./samples/" + path)
+    numberOfDocs = len(files) 
+
+    # CALCULATE
     for filename in files:
         file = open("./samples/" + path + "/" + filename, "r")
         # save this in "counts" as filename -> histogram        
@@ -37,6 +38,15 @@ def count_dir(path):
         # calculate tfidfs, given the term freqs.
     for filename in files:
         tfidfs[filename] = makeTFIDF(tfs[filename])
+
+    for filename in files:
+        # print "--- COUNTS ---"
+        # print counts[filename]
+        # print "--- TERM FREQS ---"
+        # print tfs[filename]
+        # print "--- TF-IDFS ---"
+        # print tfidfs[filename]
+        print most(filename)
 
 def makeTF(hist):
     tf = {}
@@ -89,12 +99,12 @@ def makeTFIDF(tfs):
                 numberOfDocsWithTerm += 1
         wordTFIDF = tf*math.log(numberOfDocs/numberOfDocsWithTerm)
         tfidf[word] = wordTFIDF
-        print "word:", word, " - tf:", tf, " - numberOfDocs:", numberOfDocs, " - numberOfDocsWithTerm:", numberOfDocsWithTerm, "TFIDF:",wordTFIDF
+        # print "word:", word, " - tf:", tf, " - numberOfDocs:", numberOfDocs, " - numberOfDocsWithTerm:", numberOfDocsWithTerm, "TFIDF:",wordTFIDF
     return tfidf
 
 def most(doc):
     global tfidfs
-    print "most relevant terms in ", doc
+    print "most relevant terms in doc '", doc, "'"
     dict = tfidfs[doc]
     # print dict
     words_ordered_descending_length = sorted(dict, key=dict.get, reverse=True)
@@ -102,18 +112,6 @@ def most(doc):
 
 if __name__ == '__main__':
     main()
-    first = next(iter(tfs))
-#    first = "more_words.txt"
-    print "--- COUNTS ---"
-    print counts[first]
-    print "--- TERM FREQS ---"
-    print tfs[first]
-    print "--- TF-IDFS ---"
-    print tfidfs[first]
-    print "--- MOST RELEVANT TERMS ---"
-    files = os.listdir("./samples/small_set")
-    for filename in files:
-        print most(filename)
 
 # Calculate term frequency
 # TF(t) = (Number of times term t appears in a document) 
