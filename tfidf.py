@@ -13,6 +13,7 @@ import math
 counts = {}
 tfs = {}
 tfidfs = {}
+numberOfDocs = 0
 
 def main():
     count_dir("tiny_set")
@@ -21,29 +22,39 @@ def count_dir(path):
     global counts
     global tfs
     global tfidfs
+    global numberOfDocs
     # open each file
-    for filename in os.listdir("./samples/" + path):
+    files = os.listdir("./samples/" + path)
+    numberOfDocs = len(files) # TODO, shouldn't recalculate this so many times
+
+    for filename in files:
         file = open("./samples/" + path + "/" + filename, "r")
         # save this in "counts" as filename -> histogram        
         counts[filename] = make_histogram(file)
         # save this in "tfs" as filename -> term freqs
+    for filename in files:
+        file = open("./samples/" + path + "/" + filename, "r")
         tfs[filename] = makeTF(counts[filename])
         # calculate tfidfs, given the term freqs.
+    for filename in files:
+        file = open("./samples/" + path + "/" + filename, "r")
         tfidfs[filename] = makeTFIDF(tfs[filename])
-
 
 def makeTF(hist):
     tf = {}
+    # print "makeTF for hist: ", hist
     # we have the number of times for a term
     # we need to divide it by the number of words in the document
     termCount = 0.0
     for word in hist:
         termCount += hist[word]
     
-    print "TERM COUNT: ", termCount
+    # print "TERM COUNT: ", termCount
 
     for word in hist:
         tf[word] = hist[word]/termCount
+        # print "word: ", word
+        # print "tf[word]: ", tf[word]
     
     return tf
 
@@ -68,8 +79,8 @@ def make_histogram(file):
 
 def makeTFIDF(tfs):
     tfidf = {}
-    numberOfDocs = len(counts) # TODO, shouldn't recalculate this so many times
     for word in tfs:
+        # print "Considering word: ", word
         numberOfDocsWithTerm = 0.0;
         # TF
         tf = tfs[word]
@@ -80,6 +91,7 @@ def makeTFIDF(tfs):
                 numberOfDocsWithTerm += 1
         wordTFIDF = math.log(numberOfDocs/numberOfDocsWithTerm)
         tfidf[word] = wordTFIDF
+        print "word:", word, " - numberOfDocs:", numberOfDocs, " - numberOfDocsWithTerm:", numberOfDocsWithTerm, "TFIDF:",wordTFIDF
     return tfidf
 
 def most(doc):
@@ -94,7 +106,7 @@ if __name__ == '__main__':
     main()
     first = next(iter(tfs))
     print "--- COUNTS ---"
-    print counts[next(iter(counts))]
+    print counts[first]
     print "--- TERM FREQS ---"
     print tfs[first]
     print "--- TF-IDFS ---"
